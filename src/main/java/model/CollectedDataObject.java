@@ -1,6 +1,5 @@
 package model;
 
-import GUI.addNewListItemWindow;
 import org.apache.poi.ss.usermodel.Row;
 import java.text.DecimalFormat;
 import java.util.ArrayList;

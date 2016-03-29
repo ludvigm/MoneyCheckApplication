@@ -1,4 +1,4 @@
-package GUI;
+package GUI.PopupWindows;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
