@@ -11,9 +11,12 @@ import model.CollectedDataObject;
  */
 public class ListViewContextMenu extends ContextMenu {
 
+
+
     public ListViewContextMenu(ObservableList<CollectedDataObject> listViewItems) {
-        MenuItem menuItemAddToList = new MenuItem("Add new");
-        menuItemAddToList.setOnAction((event -> {
+        //"Add new" button in menu.
+        MenuItem addItemToList = new MenuItem("Add new");
+        addItemToList.setOnAction((event -> {
             //AddNewListItemWindow window = AddNewListItemWindow.getInstance();
             addNewListItemWindow window = new addNewListItemWindow();
             window.showAndWait();
@@ -21,7 +24,6 @@ public class ListViewContextMenu extends ContextMenu {
             if (window.getDataObject() != null)
                 listViewItems.add(window.getDataObject());
         }));
-
-        getItems().addAll(menuItemAddToList);
+        getItems().addAll(addItemToList);
     }
 }

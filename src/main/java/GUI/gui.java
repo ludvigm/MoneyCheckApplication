@@ -109,6 +109,7 @@ public class gui extends Application {
 
 
         HBox bottom = new HBox();
+        bottom.setPrefSize(50,50);
         bottom.setStyle("-fx-background-color: black;");
 
         BorderPane dickPane = new BorderPane();

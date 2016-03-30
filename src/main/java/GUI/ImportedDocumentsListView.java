@@ -3,6 +3,7 @@ package GUI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import model.CollectedDataObject;
 
@@ -22,6 +23,7 @@ public class ImportedDocumentsListView extends ListView implements Subject{
 
     public ImportedDocumentsListView() {
         ListViewContextMenu listViewContextMenu = new ListViewContextMenu(listViewItems);
+        ListViewSelectedItemContextMenu listViewSelectedItemContextMenu = new ListViewSelectedItemContextMenu(listViewItems);
 
         setItems(listViewItems);
 
@@ -30,25 +32,30 @@ public class ImportedDocumentsListView extends ListView implements Subject{
             if (selected != null) {
                 selectedItem = selected;
                 notifyObservers();
+                listViewSelectedItemContextMenu.setSelectedItem(selected);
             }
         });
 
+        setOnKeyPressed(event1 -> {
+            if(event1.getCode() == KeyCode.DELETE) {
+                listViewItems.remove(selectedItem);
+            }
+        });
         setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
                 System.out.println("leftclicked on " + getSelectionModel().getSelectedItem());
-                if (listViewContextMenu.isShowing()) {
-                    listViewContextMenu.hide();
-                }
+                listViewContextMenu.hide();
+                listViewSelectedItemContextMenu.hide();
             } else if (event.getButton() == MouseButton.SECONDARY) {
                 System.out.println("rightclicked on " + getSelectionModel().getSelectedItem());
                 if (getSelectionModel().getSelectedItem() != null) {
                     getSelectionModel().clearSelection();
+                    listViewSelectedItemContextMenu.show(this,null,event.getX() + 5, event.getY() - 10);
                 } else {
                     listViewContextMenu.show(this, null, event.getX() + 5, event.getY() - 10);
                 }
             }
         });
-
     }
 
     @Override
