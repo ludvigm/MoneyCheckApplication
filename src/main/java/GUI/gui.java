@@ -100,7 +100,7 @@ public class gui extends Application {
         column2.setPercentWidth(33);
         ColumnConstraints column3 = new ColumnConstraints();
         column3.setPercentWidth(33);
-        topBar.getColumnConstraints().addAll(column1,column2,column3);
+        topBar.getColumnConstraints().addAll(column1, column2, column3);
        // topBar.setStyle("-fx-background-color: black; -fx-text-fill: white;");
         topBar.setPrefHeight(50);
         topBar.setPrefWidth(50);
@@ -111,6 +111,20 @@ public class gui extends Application {
         HBox bottom = new HBox();
         bottom.setPrefSize(50,50);
         bottom.setStyle("-fx-background-color: black;");
+
+        ToggleGroup chartModeToggle = new ToggleGroup();
+        RadioButton incomeModeRadio = new RadioButton("Show income");
+        incomeModeRadio.setOnAction(event -> {
+            pc.setShowIncome(true);
+        });
+        incomeModeRadio.setToggleGroup(chartModeToggle);
+        incomeModeRadio.setSelected(true);
+        RadioButton outComeModeRadio = new RadioButton("Show outcome");
+        outComeModeRadio.setOnAction(event -> {
+            pc.setShowIncome(false);
+        });
+        outComeModeRadio.setToggleGroup(chartModeToggle);
+        bottom.getChildren().addAll(incomeModeRadio,outComeModeRadio);
 
         BorderPane dickPane = new BorderPane();
         dickPane.setCenter(pc);
