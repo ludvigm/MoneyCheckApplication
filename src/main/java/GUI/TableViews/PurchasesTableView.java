@@ -1,7 +1,7 @@
 package GUI.TableViews;
 
 
-import GUI.Observer;
+import GUI.SelectedItemObserver;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableCell;
@@ -15,7 +15,7 @@ import model.Purchase;
 /**
  * Created by Ludvig on 3/29/2016.
  */
-public class PurchasesTableView extends TableView implements Observer {
+public class PurchasesTableView extends TableView implements SelectedItemObserver {
 
     public PurchasesTableView() {
         //Right side, TableView
@@ -49,9 +49,10 @@ public class PurchasesTableView extends TableView implements Observer {
 
 
     @Override
-    public void update(Object selectedItem) {
-        CollectedDataObject selectedCDO = (CollectedDataObject) selectedItem;
-        ObservableList<Purchase> purchases = FXCollections.observableArrayList(selectedCDO.getM_purchases());
-        setItems(purchases);
+    public void updateSelectedItem(Object selectedItem) {
+            CollectedDataObject selectedCDO = (CollectedDataObject) selectedItem;
+            ObservableList<Purchase> purchases = FXCollections.observableArrayList(selectedCDO.getM_purchases());
+            setItems(purchases);
     }
+
 }

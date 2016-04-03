@@ -15,9 +15,9 @@ import java.util.ArrayList;
 
 
 
-public class ImportedDocumentsListView extends ListView implements Subject{
+public class ImportedDocumentsListView extends ListView implements SelectedItemSubject {
 
-    private ArrayList<Observer> observers = new ArrayList<>();
+    private ArrayList<SelectedItemObserver> observers = new ArrayList<>();
     private CollectedDataObject selectedItem;
     public ObservableList<CollectedDataObject> listViewItems = FXCollections.observableArrayList();
 
@@ -28,7 +28,7 @@ public class ImportedDocumentsListView extends ListView implements Subject{
         setItems(listViewItems);
 
         getSelectionModel().selectedItemProperty().addListener(observable -> {
-            CollectedDataObject selected = (CollectedDataObject) getSelectionModel().getSelectedItem(); //GetSelectedItem()
+            CollectedDataObject selected = (CollectedDataObject) getSelectionModel().getSelectedItem();
             if (selected != null) {
                 selectedItem = selected;
                 notifyObservers();
@@ -46,6 +46,7 @@ public class ImportedDocumentsListView extends ListView implements Subject{
                 System.out.println("leftclicked on " + getSelectionModel().getSelectedItem());
                 listViewContextMenu.hide();
                 listViewSelectedItemContextMenu.hide();
+
             } else if (event.getButton() == MouseButton.SECONDARY) {
                 System.out.println("rightclicked on " + getSelectionModel().getSelectedItem());
                 if (getSelectionModel().getSelectedItem() != null) {
@@ -59,19 +60,21 @@ public class ImportedDocumentsListView extends ListView implements Subject{
     }
 
     @Override
-    public void register(Observer o) {
+    public void register(SelectedItemObserver o) {
         observers.add(o);
     }
 
     @Override
-    public void unregister(Observer o) {
+    public void unregister(SelectedItemObserver o) {
         observers.remove(observers.indexOf(o));
     }
 
     @Override
     public void notifyObservers() {
-        for(Observer o : observers) {
-            o.update(this.selectedItem);
+        if(this.selectedItem!=null) {
+            for (SelectedItemObserver o : observers) {
+                o.updateSelectedItem(this.selectedItem);
+            }
         }
     }
 }

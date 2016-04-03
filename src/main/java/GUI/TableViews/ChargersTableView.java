@@ -1,6 +1,6 @@
 package GUI.TableViews;
 
-import GUI.Observer;
+import GUI.SelectedItemObserver;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableCell;
@@ -17,7 +17,7 @@ import java.text.NumberFormat;
 /**
  * Created by Ludvig on 3/29/2016.
  */
-public class ChargersTableView extends TableView implements Observer {
+public class ChargersTableView extends TableView implements SelectedItemObserver {
 
     final NumberFormat decimalFormatter = new DecimalFormat("#0.00");
     public ChargersTableView() {
@@ -57,9 +57,10 @@ public class ChargersTableView extends TableView implements Observer {
         getColumns().setAll(chargerName,chargerIncome,chargerOutcome);
     }
     @Override
-    public void update(Object selectedItem) {
+    public void updateSelectedItem(Object selectedItem) {
         CollectedDataObject selectedCDO = (CollectedDataObject) selectedItem;
         ObservableList<Charger> chargers = FXCollections.observableArrayList(selectedCDO.getM_chargers());
         setItems(chargers);
     }
+
 }

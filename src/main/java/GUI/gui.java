@@ -22,7 +22,8 @@ public class gui extends Application {
     ImportedDocumentsListView leftSideLV = new ImportedDocumentsListView();
     final PurchasesTableView purchasesTableView = new PurchasesTableView();
     final ChargersTableView chargersTableView = new ChargersTableView();
-    final PieChartOfChargers pc = new PieChartOfChargers();
+    final PieChartOfChargers pieChartChargers = new PieChartOfChargers();
+    final BottomBox bottomBox = new BottomBox();
 
 
     public static void main(String[] args) {
@@ -33,7 +34,13 @@ public class gui extends Application {
     public void start(final Stage primaryStage) {
         leftSideLV.register(purchasesTableView);
         leftSideLV.register(chargersTableView);
-        leftSideLV.register(pc);
+        leftSideLV.register(pieChartChargers);
+        leftSideLV.register(bottomBox.sliderBox);
+
+        bottomBox.buttonBox.register(pieChartChargers);
+        bottomBox.buttonBox.register(bottomBox.sliderBox);
+
+        bottomBox.sliderBox.register(pieChartChargers);
 
         primaryStage.setTitle("MoneyTracker");
         BorderPane pane = new BorderPane();
@@ -70,18 +77,20 @@ public class gui extends Application {
         Button selectDirButton = new Button("Import all from directory..");
         selectDirButton.setOnAction(event -> {
                     File dir = directoryChooser.showDialog(null);
-                    for(File file : dir.listFiles()) {
-                        try {
-                            if(file.isFile()) {
-                                CollectedDataObject cdo = new CollectedDataObject(new BankDataDocument(file.getPath(), 0));
-                                if(cdo.getFileName(file.getPath()).split("\\.")[1].equals("xls")) {
-                                    cdo.readPurchasesFromFile();
-                                    cdo.mergeChargers();
-                                    leftSideLV.listViewItems.add(cdo);
+                    if (dir != null) {
+                        for (File file : dir.listFiles()) {
+                            try {
+                                if (file.isFile()) {
+                                    CollectedDataObject cdo = new CollectedDataObject(new BankDataDocument(file.getPath(), 0));
+                                    if (cdo.getFileName(file.getPath()).split("\\.")[1].equals("xls")) {
+                                        cdo.readPurchasesFromFile();
+                                        cdo.mergeChargers();
+                                        leftSideLV.listViewItems.add(cdo);
+                                    }
                                 }
+                            } catch (IOException | InvalidFormatException ex) {
+                                System.out.println("Error loading file.");
                             }
-                        } catch (IOException|InvalidFormatException ex) {
-                            System.out.println("Error loading file.");
                         }
                     }
                 }
@@ -107,30 +116,50 @@ public class gui extends Application {
         topBar.add(directorySelectionContainer,0,0);
         topBar.add(radioContainer,2,0);
 
+// Bottom box root
+        /*
+        VBox bottom = new VBox();
+        bottom.setPrefHeight(75);
 
-        HBox bottom = new HBox();
-        bottom.setPrefSize(50,50);
-        bottom.setStyle("-fx-background-color: black;");
-
+        HBox buttonsInBottomBox = new HBox(25);
+        buttonsInBottomBox.setPrefHeight(25);
         ToggleGroup chartModeToggle = new ToggleGroup();
         RadioButton incomeModeRadio = new RadioButton("Show income");
         incomeModeRadio.setOnAction(event -> {
-            pc.setShowIncome(true);
+            pieChartChargers.setShowIncome(true);
+            leftSideLV.notifyObservers();
         });
         incomeModeRadio.setToggleGroup(chartModeToggle);
         incomeModeRadio.setSelected(true);
         RadioButton outComeModeRadio = new RadioButton("Show outcome");
         outComeModeRadio.setOnAction(event -> {
-            pc.setShowIncome(false);
+            pieChartChargers.setShowIncome(false);
+            leftSideLV.notifyObservers();
         });
         outComeModeRadio.setToggleGroup(chartModeToggle);
-        bottom.getChildren().addAll(incomeModeRadio,outComeModeRadio);
 
-        BorderPane dickPane = new BorderPane();
-        dickPane.setCenter(pc);
-        dickPane.setBottom(bottom);
+        buttonsInBottomBox.setAlignment(Pos.BASELINE_CENTER);
 
-        pane.setCenter(dickPane);
+
+        //Slider
+        HBox sliderInBottomBox = new HBox();
+        sliderInBottomBox.setPrefHeight(50);
+        sliderInBottomBox.setAlignment(Pos.BASELINE_CENTER);
+
+        Slider slider = new Slider(0,25000,1);
+        slider.setPrefWidth(250);
+        slider.setShowTickLabels(true);
+
+
+        sliderInBottomBox.getChildren().addAll(slider);
+        buttonsInBottomBox.getChildren().addAll(incomeModeRadio,outComeModeRadio);
+        bottom.getChildren().addAll(buttonsInBottomBox,sliderInBottomBox);
+*/
+        BorderPane middleBorderPane = new BorderPane();
+        middleBorderPane.setCenter(pieChartChargers);
+        middleBorderPane.setBottom(bottomBox);
+
+        pane.setCenter(middleBorderPane);
         pane.setTop(topBar);
         pane.setRight(purchasesTableView);
         pane.setLeft(leftSideLV);
