@@ -1,5 +1,6 @@
 package GUI;
 
+import GUI.Charts.LineChartOfPurchasesByDate;
 import GUI.Charts.PieChartOfChargers;
 import GUI.TableViews.ChargersTableView;
 import GUI.TableViews.PurchasesTableView;
@@ -23,7 +24,9 @@ public class gui extends Application {
     final PurchasesTableView purchasesTableView = new PurchasesTableView();
     final ChargersTableView chargersTableView = new ChargersTableView();
     final PieChartOfChargers pieChartChargers = new PieChartOfChargers();
+    final LineChartOfPurchasesByDate lineChartOfPurchasesByDate = new LineChartOfPurchasesByDate();
     final BottomBox bottomBox = new BottomBox();
+    final BorderPane middleBorderPane = new BorderPane();
 
 
     public static void main(String[] args) {
@@ -36,6 +39,7 @@ public class gui extends Application {
         leftSideLV.register(chargersTableView);
         leftSideLV.register(pieChartChargers);
         leftSideLV.register(bottomBox.sliderBox);
+        leftSideLV.register(lineChartOfPurchasesByDate);
 
         bottomBox.buttonBox.register(pieChartChargers);
         bottomBox.buttonBox.register(bottomBox.sliderBox);
@@ -45,9 +49,7 @@ public class gui extends Application {
         primaryStage.setTitle("MoneyTracker");
         BorderPane pane = new BorderPane();
 
-
-
-        //top
+        //topright
         //Radios
         ToggleGroup tg = new ToggleGroup();
         RadioButton purchasesModeRadio = new RadioButton("View all purchases");
@@ -63,7 +65,37 @@ public class gui extends Application {
         chargerModeRadio.setToggleGroup(tg);
 
 
-        //Container
+        //top center
+        //tabpane
+        TabPane topTabs = new TabPane();
+        topTabs.getSelectionModel().selectedItemProperty().addListener(listener -> {
+            String selectedID = topTabs.getSelectionModel().getSelectedItem().getId();
+            if(selectedID.equals("1")) {
+                middleBorderPane.setCenter(pieChartChargers);
+                middleBorderPane.setBottom(bottomBox);
+            } else if(selectedID.equals("2")) {
+                middleBorderPane.setCenter(lineChartOfPurchasesByDate);
+                middleBorderPane.setBottom(null);
+
+            } else if(selectedID.equals("3")) {
+
+            }
+        });
+        Tab pieChartTab = new Tab("Chargers PieChart");
+        pieChartTab.setId("1");
+        Tab stapleDiagramTab = new Tab("Staple Diagram");
+        stapleDiagramTab.setId("2");
+
+
+
+        topTabs.getTabs().addAll(pieChartTab,stapleDiagramTab);
+
+        HBox tabPaneContainer = new HBox();
+        tabPaneContainer.getChildren().add(topTabs);
+
+        //container
+
+        // Radios Container
         HBox radioContainer = new HBox(10);
 
         radioContainer.getChildren().addAll(purchasesModeRadio,chargerModeRadio);
@@ -116,46 +148,7 @@ public class gui extends Application {
         topBar.add(directorySelectionContainer,0,0);
         topBar.add(radioContainer,2,0);
 
-// Bottom box root
-        /*
-        VBox bottom = new VBox();
-        bottom.setPrefHeight(75);
-
-        HBox buttonsInBottomBox = new HBox(25);
-        buttonsInBottomBox.setPrefHeight(25);
-        ToggleGroup chartModeToggle = new ToggleGroup();
-        RadioButton incomeModeRadio = new RadioButton("Show income");
-        incomeModeRadio.setOnAction(event -> {
-            pieChartChargers.setShowIncome(true);
-            leftSideLV.notifyObservers();
-        });
-        incomeModeRadio.setToggleGroup(chartModeToggle);
-        incomeModeRadio.setSelected(true);
-        RadioButton outComeModeRadio = new RadioButton("Show outcome");
-        outComeModeRadio.setOnAction(event -> {
-            pieChartChargers.setShowIncome(false);
-            leftSideLV.notifyObservers();
-        });
-        outComeModeRadio.setToggleGroup(chartModeToggle);
-
-        buttonsInBottomBox.setAlignment(Pos.BASELINE_CENTER);
-
-
-        //Slider
-        HBox sliderInBottomBox = new HBox();
-        sliderInBottomBox.setPrefHeight(50);
-        sliderInBottomBox.setAlignment(Pos.BASELINE_CENTER);
-
-        Slider slider = new Slider(0,25000,1);
-        slider.setPrefWidth(250);
-        slider.setShowTickLabels(true);
-
-
-        sliderInBottomBox.getChildren().addAll(slider);
-        buttonsInBottomBox.getChildren().addAll(incomeModeRadio,outComeModeRadio);
-        bottom.getChildren().addAll(buttonsInBottomBox,sliderInBottomBox);
-*/
-        BorderPane middleBorderPane = new BorderPane();
+        middleBorderPane.setTop(tabPaneContainer);
         middleBorderPane.setCenter(pieChartChargers);
         middleBorderPane.setBottom(bottomBox);
 

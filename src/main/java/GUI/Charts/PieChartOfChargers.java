@@ -40,6 +40,7 @@ public class PieChartOfChargers extends Pane implements SelectedItemObserver, Bo
 
         chart.setTitle("MoneyMoneyMoney");
         chart.setLegendSide(Side.RIGHT);
+        setVisible(false);
         //label to show on hover
         labelOnMouseEntered = new Label();
         labelOnMouseEntered.setTextFill(Color.BLACK);
@@ -73,6 +74,7 @@ public class PieChartOfChargers extends Pane implements SelectedItemObserver, Bo
                     labelOnMouseEntered.setVisible(false);
                 });
             }
+        setVisible(true);
     }
 
 

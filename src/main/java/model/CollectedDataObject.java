@@ -19,7 +19,25 @@ public class CollectedDataObject {
         this.m_chargers = new ArrayList<>();
         this.m_document = doc;
     }
+ /* DO THIS.
+    public ArrayList<Purchase> purchasesToDatedPurchases(ArrayList<Purchase> purchases) {
+        ArrayList datedPurchases = new ArrayList();
+        for(Purchase p : purchases) {
+            Purchase temp = purchases.get(purchases.indexOf(p));
+            if(tempCharger == null) {
+                Charger c = new Charger(p.getChargerName());
+                c.addPurchase(p);
+                m_chargers.add(c);
+            } else {
+                //System.out.println("Charger exists already, adding in and outcome to it!");
+                tempCharger.addPurchase(p);
+            }
+        }
 
+
+        return null;
+    }
+*/
     public void mergeChargers() {
         for(Purchase p : m_purchases) {
             Charger tempCharger = getChargerByName(p.getChargerName());
