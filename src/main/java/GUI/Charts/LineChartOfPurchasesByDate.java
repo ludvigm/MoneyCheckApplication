@@ -5,9 +5,10 @@ import javafx.collections.ObservableList;
 import javafx.scene.chart.*;
 import javafx.scene.layout.Pane;
 import model.CollectedDataObject;
-import model.Purchase;
+import model.UniqueDatePurchase;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by Ludvig on 4/4/2016.
@@ -36,15 +37,14 @@ public class LineChartOfPurchasesByDate extends Pane implements SelectedItemObse
     public void updateSelectedItem(Object selectedItem) {
         lineChart.getData().removeAll(lineChart.getData());
         CollectedDataObject current = (CollectedDataObject) selectedItem;
-        lineChart.getData().add(purchasesToSeries(current.getM_purchases()));
+        lineChart.getData().add(purchasesToSeries(current.getPositiveDatedPurchasesFromPurchases()));
+        lineChart.getData().add(purchasesToSeries(current.getNegativeDatedPurchasesFromPurchases()));
 
     }
 
-    private XYChart.Series purchasesToSeries(ArrayList<Purchase> purchases) {
+    private XYChart.Series purchasesToSeries(ArrayList<UniqueDatePurchase> datePurchases) {
         XYChart.Series series = new XYChart.Series();
-        for(Purchase p : purchases) {
-            System.out.println(p);
-            if(p.getAmount()>0)
+        for(UniqueDatePurchase p : datePurchases) {
             series.getData().add(new XYChart.Data<>(p.getDate(),p.getAmount()));
         }
         return series;

@@ -9,35 +9,56 @@ import java.util.Iterator;
 public class CollectedDataObject {
 
     private ArrayList<Purchase> m_purchases;
+    private ArrayList<UniqueDatePurchase> m_positiveDatePurchases;
+    private ArrayList<UniqueDatePurchase> m_negativeDatePurchases;
     private ArrayList<Charger> m_chargers;
     private BankDataDocument m_document;
+
 
     final DecimalFormat df = new DecimalFormat("####0.00");
 
     public CollectedDataObject(BankDataDocument doc) {
-        this.m_purchases = new ArrayList<>();
-        this.m_chargers = new ArrayList<>();
-        this.m_document = doc;
+        m_purchases = new ArrayList<>();
+        m_chargers = new ArrayList<>();
+        m_positiveDatePurchases = new ArrayList<>();
+        m_negativeDatePurchases = new ArrayList<>();
+        m_document = doc;
     }
- /* DO THIS.
-    public ArrayList<Purchase> purchasesToDatedPurchases(ArrayList<Purchase> purchases) {
-        ArrayList datedPurchases = new ArrayList();
-        for(Purchase p : purchases) {
-            Purchase temp = purchases.get(purchases.indexOf(p));
-            if(tempCharger == null) {
-                Charger c = new Charger(p.getChargerName());
-                c.addPurchase(p);
-                m_chargers.add(c);
-            } else {
-                //System.out.println("Charger exists already, adding in and outcome to it!");
-                tempCharger.addPurchase(p);
+
+
+
+    public ArrayList<UniqueDatePurchase> getPositiveDatedPurchasesFromPurchases() {
+        for(Purchase p : m_purchases) {
+            if (p.getAmount() > 0) {
+                UniqueDatePurchase datePurchase = getUniqueDatePurchaseByDate(p.getDate());
+                if (datePurchase == null) {
+                    UniqueDatePurchase u = new UniqueDatePurchase(p.getDate(), p.getAmount());
+                    m_positiveDatePurchases.add(u);
+                } else {
+                    datePurchase.addAmount(p.getAmount());
+                }
             }
         }
-
-
-        return null;
+        Collections.sort(m_positiveDatePurchases);
+        return m_positiveDatePurchases;
     }
-*/
+
+    public ArrayList<UniqueDatePurchase> getNegativeDatedPurchasesFromPurchases() {
+        for(Purchase p : m_purchases) {
+            if (p.getAmount() < 0) {
+                UniqueDatePurchase datePurchase = getUniqueDatePurchaseByDate(p.getDate());
+                if (datePurchase == null) {
+                    UniqueDatePurchase u = new UniqueDatePurchase(p.getDate(), p.getAmount());
+                    m_negativeDatePurchases.add(u);
+                } else {
+                    datePurchase.deductAmount(p.getAmount());
+                }
+            }
+        }
+        Collections.sort(m_negativeDatePurchases);
+        return m_negativeDatePurchases;
+    }
+
     public void mergeChargers() {
         for(Purchase p : m_purchases) {
             Charger tempCharger = getChargerByName(p.getChargerName());
@@ -56,6 +77,15 @@ public class CollectedDataObject {
         for(Charger c : m_chargers) {
             if (c.getChargerName().equals(chargerName)) {
                 return c;
+            }
+        }
+        return null;
+    }
+
+    private UniqueDatePurchase getUniqueDatePurchaseByDate(String date) {
+        for(UniqueDatePurchase p : m_positiveDatePurchases) {
+            if(p.getDate().equals(date)) {
+                return p;
             }
         }
         return null;
@@ -143,6 +173,10 @@ public class CollectedDataObject {
 
     public ArrayList<Charger> getM_chargers() {
         return m_chargers;
+    }
+
+    public ArrayList<UniqueDatePurchase> getM_positiveDatePurchases() {
+        return m_positiveDatePurchases;
     }
 
     public BankDataDocument getM_document() {
