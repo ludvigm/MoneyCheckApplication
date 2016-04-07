@@ -9,13 +9,13 @@ import model.UniqueDatePurchase;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by Ludvig on 4/4/2016.
  */
 public class LineChartOfPurchasesByDate extends Pane implements SelectedItemObserver {
 
-    private ObservableList<XYChart.Data> data;
     final CategoryAxis xAxis = new CategoryAxis();
     final NumberAxis yAxis = new NumberAxis();
     final LineChart<String,Number> lineChart = new LineChart<>(xAxis,yAxis);
@@ -37,9 +37,9 @@ public class LineChartOfPurchasesByDate extends Pane implements SelectedItemObse
     public void updateSelectedItem(Object selectedItem) {
         lineChart.getData().removeAll(lineChart.getData());
         CollectedDataObject current = (CollectedDataObject) selectedItem;
-        lineChart.getData().add(purchasesToSeries(current.getPositiveDatedPurchasesFromPurchases()));
-        lineChart.getData().add(purchasesToSeries(current.getNegativeDatedPurchasesFromPurchases()));
 
+        lineChart.getData().add(purchasesToSeries(current.getM_positiveDatePurchases()));
+        lineChart.getData().add(purchasesToSeries(current.getM_negativeDatePurchases()));
     }
 
     private XYChart.Series purchasesToSeries(ArrayList<UniqueDatePurchase> datePurchases) {
@@ -49,4 +49,5 @@ public class LineChartOfPurchasesByDate extends Pane implements SelectedItemObse
         }
         return series;
     }
+
 }

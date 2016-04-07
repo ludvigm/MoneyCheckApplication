@@ -27,36 +27,38 @@ public class CollectedDataObject {
 
 
 
-    public ArrayList<UniqueDatePurchase> getPositiveDatedPurchasesFromPurchases() {
+    public void readPositiveDatedPurchasesFromPurchases() {
+        ArrayList<UniqueDatePurchase> list = new ArrayList<>();
         for(Purchase p : m_purchases) {
             if (p.getAmount() > 0) {
-                UniqueDatePurchase datePurchase = getUniqueDatePurchaseByDate(p.getDate());
+                UniqueDatePurchase datePurchase = getUniqueDatePurchaseByDate(list, p.getDate());
                 if (datePurchase == null) {
                     UniqueDatePurchase u = new UniqueDatePurchase(p.getDate(), p.getAmount());
-                    m_positiveDatePurchases.add(u);
+                    list.add(u);
                 } else {
                     datePurchase.addAmount(p.getAmount());
                 }
             }
         }
-        Collections.sort(m_positiveDatePurchases);
-        return m_positiveDatePurchases;
+        Collections.sort(list);
+        m_positiveDatePurchases = list;
     }
 
-    public ArrayList<UniqueDatePurchase> getNegativeDatedPurchasesFromPurchases() {
+    public void readNegativeDatedPurchasesFromPurchases() {
+        ArrayList<UniqueDatePurchase> list = new ArrayList<>();
         for(Purchase p : m_purchases) {
             if (p.getAmount() < 0) {
-                UniqueDatePurchase datePurchase = getUniqueDatePurchaseByDate(p.getDate());
+                UniqueDatePurchase datePurchase = getUniqueDatePurchaseByDate(list, p.getDate());
                 if (datePurchase == null) {
                     UniqueDatePurchase u = new UniqueDatePurchase(p.getDate(), p.getAmount());
-                    m_negativeDatePurchases.add(u);
+                    list.add(u);
                 } else {
-                    datePurchase.deductAmount(p.getAmount());
+                    datePurchase.addAmount(p.getAmount());
                 }
             }
         }
-        Collections.sort(m_negativeDatePurchases);
-        return m_negativeDatePurchases;
+        Collections.sort(list);
+        m_negativeDatePurchases = list;
     }
 
     public void mergeChargers() {
@@ -82,8 +84,8 @@ public class CollectedDataObject {
         return null;
     }
 
-    private UniqueDatePurchase getUniqueDatePurchaseByDate(String date) {
-        for(UniqueDatePurchase p : m_positiveDatePurchases) {
+    private UniqueDatePurchase getUniqueDatePurchaseByDate(ArrayList<UniqueDatePurchase> list, String date) {
+        for(UniqueDatePurchase p : list) {
             if(p.getDate().equals(date)) {
                 return p;
             }
@@ -181,5 +183,33 @@ public class CollectedDataObject {
 
     public BankDataDocument getM_document() {
         return m_document;
+    }
+
+    public ArrayList<UniqueDatePurchase> getM_negativeDatePurchases() {
+        return m_negativeDatePurchases;
+    }
+
+    public void setM_negativeDatePurchases(ArrayList<UniqueDatePurchase> m_negativeDatePurchases) {
+        this.m_negativeDatePurchases = m_negativeDatePurchases;
+    }
+
+    public void generateDataWhenFileRead() {
+        readPurchasesFromFile();
+        mergeChargers();
+
+        readNegativeDatedPurchasesFromPurchases();
+        readPositiveDatedPurchasesFromPurchases();
+    }
+
+    public String getEarliestDateOccuringInPurchases() {
+        if(m_purchases.size()>0)
+            return m_purchases.get(0).getDate();
+        return "purchases empty";
+    }
+
+    public String getLatestDateOccuringInPurchases() {
+        if(m_purchases.size()>0)
+            return m_purchases.get(m_purchases.size()-1).getDate();
+        return "purchases empty";
     }
 }

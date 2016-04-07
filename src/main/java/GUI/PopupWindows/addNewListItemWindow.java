@@ -73,9 +73,7 @@ public class addNewListItemWindow extends Stage {
                 try {
                     if(selectedFile != null) {
                         cdo = new CollectedDataObject(new BankDataDocument(selectedFile.getPath(), 0));
-                        cdo.readPurchasesFromFile();
-                        cdo.mergeChargers();
-                        System.out.println(cdo.getTotalIn());
+                        cdo.generateDataWhenFileRead();
                     }
                     close();
                 } catch (IOException|InvalidFormatException ex) {

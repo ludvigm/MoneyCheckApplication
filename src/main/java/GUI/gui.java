@@ -72,10 +72,10 @@ public class gui extends Application {
             String selectedID = topTabs.getSelectionModel().getSelectedItem().getId();
             if(selectedID.equals("1")) {
                 middleBorderPane.setCenter(pieChartChargers);
-                middleBorderPane.setBottom(bottomBox);
+                bottomBox.sliderBox.setVisible(true);
             } else if(selectedID.equals("2")) {
                 middleBorderPane.setCenter(lineChartOfPurchasesByDate);
-                middleBorderPane.setBottom(null);
+                bottomBox.sliderBox.setVisible(false);
 
             } else if(selectedID.equals("3")) {
 
@@ -115,8 +115,7 @@ public class gui extends Application {
                                 if (file.isFile()) {
                                     CollectedDataObject cdo = new CollectedDataObject(new BankDataDocument(file.getPath(), 0));
                                     if (cdo.getFileName(file.getPath()).split("\\.")[1].equals("xls")) {
-                                        cdo.readPurchasesFromFile();
-                                        cdo.mergeChargers();
+                                        cdo.generateDataWhenFileRead();
                                         leftSideLV.listViewItems.add(cdo);
                                     }
                                 }
@@ -144,7 +143,6 @@ public class gui extends Application {
         topBar.getColumnConstraints().addAll(column1, column2, column3);
        // topBar.setStyle("-fx-background-color: black; -fx-text-fill: white;");
         topBar.setPrefHeight(50);
-        topBar.setPrefWidth(50);
         topBar.add(directorySelectionContainer,0,0);
         topBar.add(radioContainer,2,0);
 
@@ -156,7 +154,7 @@ public class gui extends Application {
         pane.setTop(topBar);
         pane.setRight(purchasesTableView);
         pane.setLeft(leftSideLV);
-        primaryStage.setScene(new Scene(pane, 1200, 500));
+        primaryStage.setScene(new Scene(pane, 1400, 600));
         primaryStage.show();
     }
 }
