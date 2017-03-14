@@ -1,45 +1,43 @@
 package GUI.Charts;
 
+import GUI.BottomBoxRadioObserver;
 import GUI.SelectedItemObserver;
-import javafx.collections.ObservableList;
 import javafx.scene.chart.*;
 import javafx.scene.layout.Pane;
 import model.CollectedDataObject;
 import model.UniqueDatePurchase;
-
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+
 
 /**
  * Created by Ludvig on 4/4/2016.
  */
-public class LineChartOfPurchasesByDate extends Pane implements SelectedItemObserver {
+public class LineChartOfPurchasesByDate extends Pane implements SelectedItemObserver, BottomBoxRadioObserver {
 
     final CategoryAxis xAxis = new CategoryAxis();
     final NumberAxis yAxis = new NumberAxis();
-    final LineChart<String,Number> lineChart = new LineChart<>(xAxis,yAxis);
-    public LineChartOfPurchasesByDate() {
+    final LineChart<String,Number> incomeLineChart = new LineChart<>(xAxis,yAxis);
+    final LineChart<String,Number> outcomeLineChart = new LineChart<>(xAxis,yAxis);
 
+    public LineChartOfPurchasesByDate() {
         xAxis.setLabel("Date");
         //creating the chart
-
-        lineChart.setTitle("Money spent each day");
-
+        incomeLineChart.setTitle("Money gained");
+        outcomeLineChart.setTitle("Money spent");
         //defining a series
-        XYChart.Series series = new XYChart.Series();
-        series.setName("Money spent");
 
-        getChildren().add(lineChart);
+
+
     }
 
     @Override
     public void updateSelectedItem(Object selectedItem) {
-        lineChart.getData().removeAll(lineChart.getData());
+        incomeLineChart.getData().removeAll(incomeLineChart.getData());
+        outcomeLineChart.getData().removeAll(outcomeLineChart.getData());
         CollectedDataObject current = (CollectedDataObject) selectedItem;
 
-        lineChart.getData().add(purchasesToSeries(current.getM_positiveDatePurchases()));
-        lineChart.getData().add(purchasesToSeries(current.getM_negativeDatePurchases()));
+        incomeLineChart.getData().add(purchasesToSeries(current.getM_positiveDatePurchases()));
+        outcomeLineChart.getData().add(purchasesToSeries(current.getM_negativeDatePurchases()));
     }
 
     private XYChart.Series purchasesToSeries(ArrayList<UniqueDatePurchase> datePurchases) {
@@ -50,4 +48,14 @@ public class LineChartOfPurchasesByDate extends Pane implements SelectedItemObse
         return series;
     }
 
+    @Override
+    public void updateChargerIncomeOrOutcome(boolean showIncome) {
+        if(showIncome) {
+            getChildren().remove(outcomeLineChart);
+            getChildren().add(incomeLineChart);
+        } else {
+            getChildren().remove(incomeLineChart);
+            getChildren().add(outcomeLineChart);
+        }
+    }
 }

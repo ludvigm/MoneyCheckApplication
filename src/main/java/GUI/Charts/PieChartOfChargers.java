@@ -60,8 +60,7 @@ public class PieChartOfChargers extends Pane implements SelectedItemObserver, Bo
             //      Display value on hover.
             for (PieChart.Data data : chart.getData()) {
                 data.getNode().setOnMouseEntered(event -> {
-                    System.out.println("entered on : " + data.getName() + " with data: " + data.getPieValue());
-                    System.out.println("X:" + event.getSceneX() + " , Y: " + event.getSceneY());
+
                     //Placement
                     Point2D inScene = new Point2D(event.getSceneX(), event.getSceneY());
                     Point2D local = sceneToLocal(inScene);

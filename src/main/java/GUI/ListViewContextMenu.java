@@ -17,7 +17,6 @@ public class ListViewContextMenu extends ContextMenu {
         //"Add new" button in menu.
         MenuItem addItemToList = new MenuItem("Add new");
         addItemToList.setOnAction((event -> {
-            //AddNewListItemWindow window = AddNewListItemWindow.getInstance();
             addNewListItemWindow window = new addNewListItemWindow();
             window.showAndWait();
             window.toFront();

@@ -30,8 +30,8 @@ public class BankDataDocument {
             this.wb = new HSSFWorkbook(inp);
             this.sheet = wb.getSheetAt(0);
         } catch(OfficeXmlFileException e) {
-
-        }
+			System.out.println("Complaint on incorrect file format");
+		}
 		this.startingRow = startingRow;
 	}
 

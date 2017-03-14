@@ -35,6 +35,11 @@ public class gui extends Application {
 
     @Override
     public void start(final Stage primaryStage) {
+
+
+        /*
+        Register
+         */
         leftSideLV.register(purchasesTableView);
         leftSideLV.register(chargersTableView);
         leftSideLV.register(pieChartChargers);
@@ -43,8 +48,10 @@ public class gui extends Application {
 
         bottomBox.buttonBox.register(pieChartChargers);
         bottomBox.buttonBox.register(bottomBox.sliderBox);
+        bottomBox.buttonBox.register(lineChartOfPurchasesByDate);
 
         bottomBox.sliderBox.register(pieChartChargers);
+
 
         primaryStage.setTitle("MoneyTracker");
         BorderPane pane = new BorderPane();

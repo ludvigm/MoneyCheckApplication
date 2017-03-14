@@ -1,15 +1,20 @@
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Observer;
 
+import GUI.BottomBoxSliderObserver;
+import GUI.BottomBoxSliderSubject;
 import model.BankDataDocument;
 import model.CollectedDataObject;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 
-public class Test {
-        public static void main(String[] args) throws InvalidFormatException, IOException {
+public class Test implements BottomBoxSliderSubject {
 
-       /*         BankDataDocument doc = new BankDataDocument("src/main/resources/2015jansept.xls", 0);
+
+
+    public static void main(String[] args) throws InvalidFormatException, IOException {
+
+                BankDataDocument doc = new BankDataDocument("src/main/resources/2015jansept.xls", 0);
 
 
         CollectedDataObject collectedDataObject = new CollectedDataObject(doc);
@@ -19,47 +24,23 @@ public class Test {
                 collectedDataObject.print();
             System.out.println(collectedDataObject.getTotalIn());
             System.out.println(collectedDataObject.getTotalOut());
-        }*/
-
-
-
-            method('a');
-            method('b');
-            method('c');
-
         }
 
 
-    private static void method(char letter) {
 
-        String letters = "gh";
+    @Override
+    public void register(BottomBoxSliderObserver o) {
 
+    }
 
-        String word = "babbe";
-        int i = 0;
-        while (i < letters.length()){
-            if (letter == letters.charAt(i)){
-                System.out.println("found in letters");
-                return;
-            }
-            i++;
-        }
+    @Override
+    public void unregister(BottomBoxSliderObserver o) {
 
-        int j = 0;
+    }
 
-        while (j < word.length()){
-            System.out.println(word.charAt(j));
-            System.out.println(letter);
+    @Override
+    public void notifyObservers() {
 
-            if (letter == word.charAt(j)){
-
-                System.out.println("found in word");
-                return;
-            }
-            j++;
-        }
-
-        System.out.println("error");
     }
 }
 
